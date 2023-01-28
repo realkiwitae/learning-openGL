@@ -20,6 +20,7 @@ bool direction = true;
 float triOffset = 0.f;
 float triMaxOffset = .7f;
 float triInc = .005f;
+float rota = 0.f;
 
 // Vertex shader
 static const std::string vShader = "                                                \n\
@@ -191,7 +192,10 @@ int main(void)
         glUseProgram(shader);
 
         glm::mat4 model(1.0f);
-        model = glm::translate(model,glm::vec3(triOffset,triOffset,0.f));
+        model = glm::translate(model,glm::vec3(triOffset,0.f,0.f));
+        rota +=.1f;
+        if(rota>=360.f)rota-=360.f;
+        model = glm::rotate(model,glm::radians(rota),glm::vec3(0.f,0.f,1.f));
 
         glUniformMatrix4fv(uniformModel,1,GL_FALSE,glm::value_ptr(model));
 
