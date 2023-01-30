@@ -28,22 +28,28 @@ static const std::string vShader = "                                            
 #version 330                                                                  \n\
                                                                               \n\
 layout (location = 0) in vec3 pos;											  \n\
+                                                                              \n\
+out vec4 vCol;                                                                \n\
+                                                                              \n\
 uniform mat4 model;											  \n\
                                                                      \n\
 void main()                                                                   \n\
 {                                                                             \n\
     gl_Position = model*vec4(pos,1.);				  \n\
+    vCol = vec4(clamp(pos,0.f,1.f),1.f);				  \n\
 }";
 
 // Fragment Shader
 static const std::string fShader = "                                                \n\
 #version 330                                                                  \n\
                                                                               \n\
+in vec4 vCol;                                                                \n\
+                                                                              \n\
 out vec4 colour;                                                               \n\
                                                                               \n\
 void main()                                                                   \n\
 {                                                                             \n\
-    colour = vec4(1.0, 0.0, 0.0, 1.0);                                         \n\
+    colour = vCol;                                         \n\
 }";
 
 
@@ -199,9 +205,9 @@ int main(void)
 
 
         glm::mat4 model(1.0f);
-        model = glm::translate(model,glm::vec3(triOffset,0.f,0.f));
-        model = glm::rotate(model,glm::radians(rota),glm::vec3(0.f,0.f,1.f));
-        model = glm::scale(model,glm::vec3(curs,curs,1.f));
+       // model = glm::translate(model,glm::vec3(triOffset,0.f,0.f));
+       // model = glm::rotate(model,glm::radians(rota),glm::vec3(0.f,0.f,1.f));
+        model = glm::scale(model,glm::vec3(.4f,.4f,1.f));
 
         glUniformMatrix4fv(uniformModel,1,GL_FALSE,glm::value_ptr(model));
 
