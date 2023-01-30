@@ -14,7 +14,7 @@
 // Win dimensions
 const GLint WIDTH = 800, HEIGHT = 600;
 
-GLuint VAO,IBO, VBO, shader, uniformModel;
+GLuint VAO,IBO, VBO, shader, uniformModel, uniformProjection;
 
 bool direction = true;
 float triOffset = 0.f;
@@ -32,10 +32,11 @@ layout (location = 0) in vec3 pos;											  \n\
 out vec4 vCol;                                                                \n\
                                                                               \n\
 uniform mat4 model;											  \n\
+uniform mat4 projection;											  \n\
                                                                      \n\
 void main()                                                                   \n\
 {                                                                             \n\
-    gl_Position = model*vec4(pos,1.);				  \n\
+    gl_Position = projection*model*vec4(pos,1.);				  \n\
     vCol = vec4(clamp(pos,0.f,1.f),1.f);				  \n\
 }";
 
@@ -148,6 +149,7 @@ void CompileShaders()
 	}
 
     uniformModel = glGetUniformLocation(shader,"model");
+    uniformProjection = glGetUniformLocation(shader,"projection");
 }
 int main(void)
 {
@@ -199,6 +201,9 @@ int main(void)
     CreateTriangle();
     CompileShaders();
 
+
+    glm::mat4 projection = glm::perspective(45.f,(GLfloat)bufferWidth/bufferHeight,.1f,100.f);
+
     //Loop until window closed
     while(!glfwWindowShouldClose(mainWindow)){
         // Get + Handl user input events
@@ -220,11 +225,11 @@ int main(void)
 
 
         glm::mat4 model(1.0f);
-       // model = glm::translate(model,glm::vec3(triOffset,0.f,0.f));
+        model = glm::translate(model,glm::vec3(0.f,0.f,-2.5f));
         model = glm::rotate(model,glm::radians(rota),glm::vec3(0.f,1.f,0.f));
         model = glm::scale(model,glm::vec3(.4f,.4f,1.f));
-
         glUniformMatrix4fv(uniformModel,1,GL_FALSE,glm::value_ptr(model));
+        glUniformMatrix4fv(uniformProjection,1,GL_FALSE,glm::value_ptr(projection));
 
         glBindVertexArray(VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,IBO);
