@@ -10,8 +10,8 @@
 class Window
 {
 public:
-    Window():w(800),h(600),keys(0),mouseFirstMoved(true){}
-    Window(GLuint _w, GLuint _h):w(_w),h(_h),keys(0),mouseFirstMoved(true){}
+    Window():w(800),h(600),keys(0),xchange(0),ychange(0),mouseFirstMoved(true){}
+    Window(GLuint _w, GLuint _h):w(_w),h(_h),keys(0),xchange(0),ychange(0),mouseFirstMoved(true){}
     ~Window();
     int initialise();
     GLfloat getBufferWidth(){return bufferW;}
