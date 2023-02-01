@@ -36,6 +36,9 @@ int Window::initialise(){
     // Set context for GLEW to use
     glfwMakeContextCurrent(mainWindow);
 
+    // ha,d key + mouse;
+    createCallbacks();
+    glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     // Allow modern extension features
     glewExperimental = GL_TRUE;
 
@@ -51,4 +54,40 @@ int Window::initialise(){
     // Setup viewpoortsize
     glViewport(0,0,bufferW,bufferH);
 
+    glfwSetWindowUserPointer(mainWindow,this);
+
+}
+
+void Window::createCallbacks(){
+    glfwSetKeyCallback(mainWindow,handleKeys);
+    glfwSetCursorPosCallback(mainWindow,handleMouse);
+}
+
+void Window::handleKeys(GLFWwindow* w ,int key, int code, int action, int mode){
+    Window* thew = static_cast<Window*>(glfwGetWindowUserPointer(w));
+    if( key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
+        glfwSetWindowShouldClose(w,GL_TRUE);
+    }
+
+    if(key>=0 && key < 1024){
+        if(action == GLFW_PRESS){
+            thew->keys |= 1UL << key;
+        }else if(action == GLFW_RELEASE){
+            thew->keys &= ~(1UL << key);
+        }
+    }
+}
+
+void Window::handleMouse(GLFWwindow* w , double xpos, double ypos){
+    Window* thew = static_cast<Window*>(glfwGetWindowUserPointer(w));
+    if(thew->mouseFirstMoved){
+        thew->lastx = xpos;
+        thew->lasty = ypos;       
+        thew->mouseFirstMoved = false;
+    }
+    thew->xchange = xpos - thew->lastx;
+    thew->ychange = -ypos + thew->lasty;
+
+    thew->lastx = xpos;
+    thew->lasty = ypos;   
 }
