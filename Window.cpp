@@ -1,5 +1,8 @@
 #include "Window.h"
 #include <iostream>
+#include "./utils/utils.hpp"
+
+extern double now;
 
 Window::~Window()
 {
@@ -38,7 +41,7 @@ int Window::initialise(){
 
     // ha,d key + mouse;
     createCallbacks();
-    glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  //  glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     // Allow modern extension features
     glewExperimental = GL_TRUE;
 

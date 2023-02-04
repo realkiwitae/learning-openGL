@@ -20,8 +20,8 @@ public:
     bool shouldClose(){glfwWindowShouldClose(mainWindow);}
     void swapBuffers(){glfwSwapBuffers(mainWindow);}
     long* getkeys(){return &keys;}
-    GLfloat getxchange(){GLfloat x=xchange,xchange=0;return x;}
-    GLfloat getychange(){GLfloat y=ychange,ychange=0;return y;}
+    GLfloat getxchange(){GLfloat x=xchange;xchange=0;return x;}
+    GLfloat getychange(){GLfloat y=ychange;ychange=0;return y;}
 
 private:
     GLFWwindow *mainWindow;

@@ -52,6 +52,7 @@ void Shader::compile(std::string vcode , std::string fcode){
 
     uniformModel = glGetUniformLocation(id,"model");
     uniformProjection = glGetUniformLocation(id,"projection");
+    uniformView = glGetUniformLocation(id,"view");
 }
 
 void Shader::add( GLuint theProgram,const std::string shaderCode, GLenum shaderType){
@@ -80,6 +81,7 @@ void Shader::add( GLuint theProgram,const std::string shaderCode, GLenum shaderT
 
 GLuint Shader::getProjectionLocation(){return uniformProjection;}
 GLuint Shader::getModelLocation(){return uniformModel;}
+GLuint Shader::getViewLocation(){return uniformView;}
 void Shader::use(){glUseProgram(id);}
 void Shader::clear(){
     if(id != 0) glDeleteProgram(id),id = 0;
