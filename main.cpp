@@ -1,3 +1,5 @@
+#define STB_IMAGE_IMPLEMENTATION
+
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -8,13 +10,18 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <SOIL/SOIL.h>
 
 #include "Mesh.h"
 #include "Shader.h"
 #include "Window.h"
 #include "./gameObject/Camera.h"
 #include "./utils/utils.hpp"
+#include "./textures/Texture.h"
 
+#include <ctime>
+#include <iomanip>
+#include <fstream>
 // Win dimensions
 const GLint WIDTH = 800, HEIGHT = 600;
 extern double now,last_time,delta_time;
@@ -23,6 +30,10 @@ std::vector<Mesh*> meshList = {};
 std::vector<Shader> shaderList = {};
 Window mainWindow;
 Camera camera;
+
+Texture brickTexture;
+Texture dirtTexture;
+
 // Vertex shader
 static const std::string vShader = "./shaders/vertex_shader.glsl";
 static const std::string fShader = "./shaders/fragment_shader.glsl"; 
@@ -37,17 +48,18 @@ void CreateObjects(){
     };
 
 	GLfloat vertices[] = {
-		-1.0f, -1.0f, 0.0f,
-        0.f,-1.f,1.f,
-		1.0f, -1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f
+	//	x      y      z			u	  v
+		-1.0f, -1.0f, 0.0f,		0.0f, 0.0f,	
+		0.0f, -1.0f, 1.0f,		0.5f, 0.0f,
+		1.0f, -1.0f, 0.0f,		1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,		0.5f, 1.0f
 	};
 
     Mesh* obj = new Mesh();
-    obj->create(vertices,indices,12,12);
+    obj->create(vertices,indices,20,12);
     meshList.push_back(obj);
     Mesh* obj1 = new Mesh();
-    obj1->create(vertices,indices,12,12);
+    obj1->create(vertices,indices,20,12);
     meshList.push_back(obj1);
 }
 
@@ -59,6 +71,7 @@ void CreateShaders(){
 
 int main(void)
 {
+
     mainWindow = Window(WIDTH,HEIGHT);
     mainWindow.initialise();
     
@@ -66,6 +79,12 @@ int main(void)
     CreateShaders();
 
     camera = Camera(glm::vec3(0.f),glm::vec3(0.f,1.f,0.f),-90.f,0.f,4.f,.3f);
+
+    brickTexture = Texture("./textures/brick.png");
+    brickTexture.load();
+    dirtTexture = Texture("./textures/dirt.png");
+    dirtTexture.load();
+
 
     GLuint uniformProjection = 0,uniformModel = 0,uniformView = 0;
     glm::mat4 projection = glm::perspective(45.f,mainWindow.getBufferWidth()/mainWindow.getBufferHeight(),.1f,100.f);
@@ -100,6 +119,7 @@ int main(void)
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+        brickTexture.use();
 		meshList[0]->render();
 
 		model = glm::mat4(1.0f);
@@ -107,6 +127,7 @@ int main(void)
         // model = glm::rotate(model,glm::radians(45.f),glm::vec3(0.f,1.f,0.f));
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+        dirtTexture.use();
 		meshList[1]->render();
 
         glUseProgram(0);
