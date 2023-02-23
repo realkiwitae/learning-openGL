@@ -18,6 +18,7 @@
 #include "./gameObject/Camera.h"
 #include "./utils/utils.hpp"
 #include "./textures/Texture.h"
+#include "./gameObject/Light.h"
 
 #include <ctime>
 #include <iomanip>
@@ -33,6 +34,8 @@ Camera camera;
 
 Texture brickTexture;
 Texture dirtTexture;
+
+Light mainlight;
 
 // Vertex shader
 static const std::string vShader = "./shaders/vertex_shader.glsl";
@@ -85,8 +88,9 @@ int main(void)
     dirtTexture = Texture("./textures/dirt.png");
     dirtTexture.load();
 
+    mainlight = Light(1.f,1.f,1.f,.2f);
 
-    GLuint uniformProjection = 0,uniformModel = 0,uniformView = 0;
+    GLuint uniformProjection = 0,uniformModel = 0,uniformView = 0,uniformAmbientIntensity=0,uniformAmbientColour=0;
     glm::mat4 projection = glm::perspective(45.f,mainWindow.getBufferWidth()/mainWindow.getBufferHeight(),.1f,100.f);
     
     last_time = glfwGetTime();
@@ -111,6 +115,10 @@ int main(void)
         uniformModel = shaderList[0].getModelLocation();
         uniformProjection = shaderList[0].getProjectionLocation();
         uniformView = shaderList[0].getViewLocation();
+        uniformAmbientColour = shaderList[0].getAmbientColourLocation();
+        uniformAmbientIntensity = shaderList[0].getAmbientIntensityLocation();
+
+        mainlight.use(uniformAmbientIntensity,uniformAmbientColour);
 
 		glm::mat4 model(1.0f);	
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));

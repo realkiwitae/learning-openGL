@@ -17,10 +17,13 @@ public:
     GLuint getProjectionLocation();
     GLuint getModelLocation();
     GLuint getViewLocation();
+    GLuint getAmbientIntensityLocation();
+    GLuint getAmbientColourLocation();
+
     void use();
     void clear();
 private:
-    GLuint id, uniformModel, uniformProjection,uniformView;
+    GLuint id, uniformModel, uniformProjection,uniformView,uniformAmbientColour,uniformAmbientIntensity;
     void compile(std::string vcode , std::string fcode);
     void add( GLuint theProgram,const std::string shaderCode, GLenum shaderType);
 };
