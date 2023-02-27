@@ -18,6 +18,9 @@ public:
 
     void keyControls(long* keys);
     void mouseControl(GLfloat xchange, GLfloat ychange);
+
+    glm::vec3 getPosition();
+
     glm::mat4 calculateViewMatrix();
 private:
 

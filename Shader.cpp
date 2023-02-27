@@ -57,8 +57,9 @@ void Shader::compile(std::string vcode , std::string fcode){
 	uniformAmbientIntensity = glGetUniformLocation(id, "directionalLight.ambientIntensity");
 	uniformDirection = glGetUniformLocation(id, "directionalLight.direction");
 	uniformDiffuseIntensity = glGetUniformLocation(id, "directionalLight.diffuseIntensity");
-
-
+	uniformSpecularIntensity = glGetUniformLocation(id, "material.specularIntensity");
+	uniformShininess= glGetUniformLocation(id, "material.shininess");
+	uniformEyePos = glGetUniformLocation(id, "eyePosition");
 }
 
 void Shader::add( GLuint theProgram,const std::string shaderCode, GLenum shaderType){
@@ -92,7 +93,9 @@ GLuint Shader::getAmbientIntensityLocation(){return uniformAmbientIntensity;}
 GLuint Shader::getAmbientColourLocation(){return uniformAmbientColour;}
 GLuint Shader::getDiffuseIntensityLocation(){return uniformDiffuseIntensity;}
 GLuint Shader::getDirectionLocation(){return uniformDirection;}
-
+GLuint Shader::getSpecularIntensityLocation(){return uniformSpecularIntensity;}
+GLuint Shader::getShininessLocation(){return uniformShininess;}
+GLuint Shader::getEyePositionLocation(){return uniformEyePos;}
 
 void Shader::use(){glUseProgram(id);}
 void Shader::clear(){
