@@ -1,6 +1,6 @@
 #include "Window.h"
 #include <iostream>
-#include "./utils/utils.hpp"
+#include "./utils/utils.h"
 
 extern double now;
 

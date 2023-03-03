@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "../utils/utils.hpp"
+#include "../utils/utils.h"
 #include "GLFW/glfw3.h"
 
 #include <iostream>
