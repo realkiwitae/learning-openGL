@@ -23,9 +23,12 @@
 #include "./gameObject/SpotLight.h"
 #include "./textures/Material.h"
 
+#include "./models/Model.h"
+
 #include <ctime>
 #include <iomanip>
 #include <fstream>
+
 // Win dimensions
 const GLint WIDTH = 1366, HEIGHT = 768;
 extern double now,last_time,delta_time;
@@ -45,6 +48,9 @@ Material dullMaterial;
 DirectionalLight mainlight;
 PointLight pointLights[MAX_N_POINT_LIGHTS];
 SpotLight spotLights[MAX_N_SPOT_LIGHTS];
+
+Model sw_emperorShuttle;
+
 // Vertex shader
 static const std::string vShader = "./shaders/vertex_shader.glsl";
 static const std::string fShader = "./shaders/fragment_shader.glsl"; 
@@ -137,14 +143,19 @@ int main(void)
     camera = Camera(glm::vec3(0.f),glm::vec3(0.f,1.f,0.f),-90.f,0.f,5.f,.5f);
 
     brickTexture = Texture("./textures/brick.png");
-    brickTexture.load();
+    brickTexture.loadAlpha();
     dirtTexture = Texture("./textures/dirt.png");
-    dirtTexture.load();
+    dirtTexture.loadAlpha();
     plainTexture = Texture("./textures/plain.png");
-    plainTexture.load();
+    plainTexture.loadAlpha();
 
     shinyMaterial = Material(1.f, 32);
     dullMaterial = Material(.3f,4);
+
+//models
+    sw_emperorShuttle = Model();
+    sw_emperorShuttle.load("Star Wars emperor shuttle");
+
 
     mainlight = DirectionalLight(1.f,1.f,1.f,
                                 .1f,.1f,
@@ -247,6 +258,15 @@ int main(void)
         shinyMaterial.use(uniformSpecularIntensity,uniformShininess);
         meshList[2]->render();
         
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, -2.0f, -0.f));
+        // model = glm::rotate(model,glm::radians(45.f),glm::vec3(0.f,1.f,0.f));
+		model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
+        glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+        shinyMaterial.use(uniformSpecularIntensity,uniformShininess);
+        sw_emperorShuttle.render();
+        
+
         glUseProgram(0);
 
         mainWindow.swapBuffers();

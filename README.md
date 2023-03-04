@@ -11,3 +11,6 @@ sudo apt-get install libglew-dev
 sudo apt install libglm-dev
 # SOIL2
 sudo apt-get install -y libsoil-dev
+# ASSIMP
+sudo apt-get install libassimp-dev
+

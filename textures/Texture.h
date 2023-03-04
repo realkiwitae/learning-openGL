@@ -15,7 +15,8 @@ public:
     Texture(std::string f);
     ~Texture();
 
-    void load();
+    bool load();
+    bool loadAlpha();
     void use();
     void clear();
 
