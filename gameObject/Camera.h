@@ -20,6 +20,7 @@ public:
     void mouseControl(GLfloat xchange, GLfloat ychange);
 
     glm::vec3 getPosition();
+    glm::vec3 getDirection();
 
     glm::mat4 calculateViewMatrix();
 private:

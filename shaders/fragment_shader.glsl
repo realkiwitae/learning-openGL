@@ -1,6 +1,7 @@
 #version 330
 
 const int MAX_N_POINT_LIGHTS = 3;
+const int MAX_N_SPOT_LIGHTS = 3;
 
 struct Light{
 	vec3 colour;
@@ -22,6 +23,12 @@ struct PointLight{
 	float exponent;
 };
 
+struct SpotLight{
+	PointLight base;
+	vec3 direction;
+	float edge;
+};
+
 struct Material
 {
 	float specularIntensity;
@@ -36,8 +43,10 @@ in vec3 FragPos;
 out vec4 colour;
 
 uniform int n_pointLights;
+uniform int n_spotLights;
 uniform DirectionalLight directionalLight;
 uniform PointLight pointLights[MAX_N_POINT_LIGHTS];
+uniform SpotLight spotLights[MAX_N_SPOT_LIGHTS];
 
 uniform sampler2D theTexture;
 uniform Material material;
@@ -73,20 +82,46 @@ vec4 calcDirectionLight(){
 	return calcLightByDirection(directionalLight.base,directionalLight.direction);
 }
 
+vec4 calcPointLight(PointLight pLight){
+	vec3 dir = FragPos - pLight.position;
+	float d = length(dir);
+	dir = normalize(dir);
+	float attenuation = (pLight.constant + pLight.linear*d + pLight.exponent*d*d);
+	return calcLightByDirection(pLight.base,dir)/attenuation;
+}
+
 vec4 calcPointLights(){
 	vec4 totcol = vec4(0.f);
 	for(int i = 0; i < n_pointLights; i++){
-		vec3 dir = FragPos - pointLights[i].position;
-		float d = length(dir);
-		dir = normalize(dir);
-		float attenuation = (pointLights[i].constant + pointLights[i].linear*d + pointLights[i].exponent*d*d);
-		totcol += calcLightByDirection(pointLights[i].base,dir)/attenuation;
+		totcol += calcPointLight(pointLights[i]);
+	}
+	return totcol;
+}
+
+vec4 calcSpotLight(SpotLight sLight){
+	vec3 rayDirection = normalize(FragPos - sLight.base.position);
+	float slFactor = dot(rayDirection, sLight.direction);
+	
+	if(slFactor > sLight.edge)
+	{
+		vec4 colour = calcPointLight(sLight.base);
+		
+		return colour * (1.0f - (1.0f - slFactor)*(1.0f/(1.0f - sLight.edge)));
+		
+	} else {
+		return vec4(0, 0, 0, 0);
+	}
+}
+vec4 calcSpotLights(){
+	vec4 totcol = vec4(0.f);
+	for(int i = 0; i < n_spotLights; i++){
+		totcol += calcSpotLight(spotLights[i]);
 	}
 	return totcol;
 }
 
 void main()
 {
-	vec4 finalColour = calcDirectionLight() + calcPointLights(); 
+	vec4 finalColour = calcDirectionLight() + calcPointLights() + calcSpotLights(); 
 	colour = texture(theTexture,TexCoord) * finalColour;
 }

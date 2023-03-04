@@ -20,6 +20,7 @@
 #include "./textures/Texture.h"
 #include "./gameObject/DirectionalLight.h"
 #include "./gameObject/PointLight.h"
+#include "./gameObject/SpotLight.h"
 #include "./textures/Material.h"
 
 #include <ctime>
@@ -43,7 +44,7 @@ Material dullMaterial;
 
 DirectionalLight mainlight;
 PointLight pointLights[MAX_N_POINT_LIGHTS];
-
+SpotLight spotLights[MAX_N_SPOT_LIGHTS];
 // Vertex shader
 static const std::string vShader = "./shaders/vertex_shader.glsl";
 static const std::string fShader = "./shaders/fragment_shader.glsl"; 
@@ -146,25 +147,38 @@ int main(void)
     dullMaterial = Material(.3f,4);
 
     mainlight = DirectionalLight(1.f,1.f,1.f,
-                                .1f,.3f,
+                                .1f,.1f,
                                 glm::vec3(0.f,0.f,-1.f));
 
-    unsigned int pointLightCount = 2;
+    unsigned int pointLightCount = 1;
 
     pointLights[0] = PointLight(0.f,0.f,1.f,
-                            .1f,1.f,
+                            .1f,.1f,
                             glm::vec3(4.f,0.f,0.f),
                             .3f,.2f,.1f);
 
-    pointLights[1] = PointLight(0.f,1.f,0.f,
-                            .1f,1.f,
-                            glm::vec3(-4.f,2.f,0.f),
-                            .3f,.1f,.1f);
+    // pointLights[1] = PointLight(0.f,1.f,0.f,
+    //                         .1f,.1f,
+    //                         glm::vec3(-4.f,2.f,0.f),
+    //                         .3f,.1f,.1f);
 
     // pointLights[2] = PointLight(0.f,1.f,0.f,
     //                         .1f,1.f,
     //                         glm::vec3(-4.f,0.f,0.f),
     //                         .3f,.2f,.1f);
+
+    unsigned int spotLightCount = 2;
+
+    spotLights[0] = SpotLight(1.f,1.f,1.f,
+                            .0f,2.f,glm::vec3(0.f),1.f,.0f,.0f,
+                            glm::vec3(0.f,-1.f,0.f),
+                            15.f
+                            );
+    spotLights[1] = SpotLight(1.f,1.f,1.f,
+                            1.f,1.f,glm::vec3(0.f,-1.5f,0.f),1.f,.0f,.0f,
+                            glm::vec3(-100.f,-1.f,0.f),
+                            20.f
+                            );
 
     GLuint uniformProjection = 0,uniformModel = 0,uniformView = 0,uniformEyePos = 0,
         uniformSpecularIntensity = 0, uniformShininess = 0;
@@ -196,10 +210,13 @@ int main(void)
         uniformShininess = shaderList[0].getShininessLocation();
         uniformEyePos = shaderList[0].getEyePositionLocation();
         
+        spotLights[0].setFlash(camera.getPosition() + glm::vec3(.0f,-.3f,0.f),camera.getDirection());
+
         shaderList[0].setDirectionalLight(&mainlight);
         shaderList[0].setPointLights(pointLights,pointLightCount);
-
-		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+        shaderList[0].setSpotLights(spotLights,spotLightCount);
+		
+        glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePos, camera.getPosition().x,camera.getPosition().y,camera.getPosition().z);
 
@@ -226,7 +243,7 @@ int main(void)
         // model = glm::rotate(model,glm::radians(45.f),glm::vec3(0.f,1.f,0.f));
 		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
         glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-        plainTexture.use();
+        dirtTexture.use();
         shinyMaterial.use(uniformSpecularIntensity,uniformShininess);
         meshList[2]->render();
         

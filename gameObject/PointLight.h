@@ -15,7 +15,7 @@ public:
     ~PointLight(){};
     virtual void use(sLightLocation lightloc)override;
 
-private:
+protected:
     glm::vec3 position;
     GLfloat constant, linear, exponent;// attenuation ax*x + bx + c
 };

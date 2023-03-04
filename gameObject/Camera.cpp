@@ -51,3 +51,4 @@ void Camera::mouseControl(GLfloat xchange, GLfloat ychange)
 }
 
 glm::vec3 Camera::getPosition(){return position;}
+glm::vec3 Camera::getDirection(){return glm::normalize(front);}

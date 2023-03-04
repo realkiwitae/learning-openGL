@@ -9,6 +9,8 @@
 
 #include "../gameObject/DirectionalLight.h"
 #include "../gameObject/PointLight.h"
+#include "../gameObject/SpotLight.h"
+
 #include "../utils/utils.h"
 
 class Shader
@@ -33,8 +35,10 @@ public:
     void clear();
     void setDirectionalLight(DirectionalLight* dLight);
     void setPointLights(PointLight* pLights, unsigned int n);
+    void setSpotLights(SpotLight* sLights, unsigned int n);
 private:
     int n_pointLights;
+    int n_spotLights;
 
     struct {
         GLuint colour;
@@ -51,7 +55,20 @@ private:
         GLuint linear;
         GLuint exponent;
     } uniformPointLight[MAX_N_POINT_LIGHTS];
+    struct {
+        GLuint colour;
+        GLuint ambientIntensity;
+        GLuint diffuseIntensity;
+        GLuint position;
+        GLuint constant;
+        GLuint linear;
+        GLuint exponent;
+        GLuint direction;
+        GLuint edge;
+    } uniformSpotLight[MAX_N_SPOT_LIGHTS];
+
     GLuint uniform_n_pointLights;
+    GLuint uniform_n_spotLights;
     GLuint id, uniformModel, uniformProjection,uniformView,uniformEyePos,
         uniformSpecularIntensity,uniformShininess;
     void compile(std::string vcode , std::string fcode);

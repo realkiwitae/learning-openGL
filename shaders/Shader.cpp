@@ -60,6 +60,7 @@ void Shader::compile(std::string vcode , std::string fcode){
 	uniformSpecularIntensity = glGetUniformLocation(id, "material.specularIntensity");
 	uniformShininess= glGetUniformLocation(id, "material.shininess");
 	uniformEyePos = glGetUniformLocation(id, "eyePosition");
+
 	uniform_n_pointLights = glGetUniformLocation(id,"n_pointLights");
 
 	for(size_t i = 0; i < MAX_N_POINT_LIGHTS; i++){
@@ -70,6 +71,18 @@ void Shader::compile(std::string vcode , std::string fcode){
 		uniformPointLight[i].constant = glGetUniformLocation(id,("pointLights["+std::to_string(i)+"].constant").c_str());
 		uniformPointLight[i].linear = glGetUniformLocation(id,("pointLights["+std::to_string(i)+"].linear").c_str());
 		uniformPointLight[i].exponent = glGetUniformLocation(id,("pointLights["+std::to_string(i)+"].exponent").c_str());
+	}
+	uniform_n_spotLights = glGetUniformLocation(id,"n_spotLights");
+	for(size_t i = 0; i < MAX_N_SPOT_LIGHTS; i++){
+		uniformSpotLight[i].colour = glGetUniformLocation(id,("spotLights["+std::to_string(i)+"].base.base.colour").c_str());
+		uniformSpotLight[i].ambientIntensity = glGetUniformLocation(id,("spotLights["+std::to_string(i)+"].base.base.ambientIntensity").c_str());
+		uniformSpotLight[i].diffuseIntensity = glGetUniformLocation(id,("spotLights["+std::to_string(i)+"].base.base.diffuseIntensity").c_str());
+		uniformSpotLight[i].position = glGetUniformLocation(id,("spotLights["+std::to_string(i)+"].base.position").c_str());
+		uniformSpotLight[i].constant = glGetUniformLocation(id,("spotLights["+std::to_string(i)+"].base.constant").c_str());
+		uniformSpotLight[i].linear = glGetUniformLocation(id,("spotLights["+std::to_string(i)+"].base.linear").c_str());
+		uniformSpotLight[i].exponent = glGetUniformLocation(id,("spotLights["+std::to_string(i)+"].base.exponent").c_str());
+		uniformSpotLight[i].direction = glGetUniformLocation(id,("spotLights["+std::to_string(i)+"].direction").c_str());
+		uniformSpotLight[i].edge = glGetUniformLocation(id,("spotLights["+std::to_string(i)+"].edge").c_str());
 	}
 }
 
@@ -141,4 +154,24 @@ void Shader::setPointLights(PointLight* pLights, unsigned int n){
 		pLights[i].use(lightloc);
 	}
 
+}
+
+void Shader::setSpotLights(SpotLight* sLights, unsigned int n){
+	n_spotLights = std::min((unsigned int)MAX_N_SPOT_LIGHTS, n);
+	sLightLocation lightloc;
+	glUniform1i(uniform_n_spotLights,n_spotLights);
+
+	for(size_t i = 0; i < n_spotLights;i++){
+		sLightLocation lightloc;
+		lightloc.ambientIntensityLocation = uniformSpotLight[i].ambientIntensity;
+		lightloc.ambientCoulourLocation = uniformSpotLight[i].colour;
+		lightloc.diffuseIntensityLocation = uniformSpotLight[i].diffuseIntensity;
+		lightloc.positionLocation = uniformSpotLight[i].position;
+		lightloc.constantLocation = uniformSpotLight[i].constant;
+		lightloc.linearLocation = uniformSpotLight[i].linear;
+		lightloc.exponentialLocation = uniformSpotLight[i].exponent;
+		lightloc.directionLocation = uniformSpotLight[i].direction;
+		lightloc.edgeLocation = uniformSpotLight[i].edge;
+		sLights[i].use(lightloc);
+	}
 }

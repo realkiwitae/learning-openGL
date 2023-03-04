@@ -7,14 +7,15 @@
 #include <glm/glm.hpp>
 
 struct sLightLocation{
-    GLfloat ambientIntensityLocation = 0;
-    GLfloat ambientCoulourLocation = 0;
-    GLfloat diffuseIntensityLocation = 0;
-    GLfloat directionLocation = 0;
-    GLfloat positionLocation = 0;
-    GLfloat constantLocation = 0;
-    GLfloat linearLocation = 0;
-    GLfloat exponentialLocation = 0;
+    GLuint ambientIntensityLocation = 0;
+    GLuint ambientCoulourLocation = 0;
+    GLuint diffuseIntensityLocation = 0;
+    GLuint directionLocation = 0;
+    GLuint positionLocation = 0;
+    GLuint constantLocation = 0;
+    GLuint linearLocation = 0;
+    GLuint exponentialLocation = 0;
+    GLuint edgeLocation = 0;
 };
 
 class Light
