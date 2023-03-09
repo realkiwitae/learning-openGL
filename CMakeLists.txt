@@ -17,7 +17,11 @@ find_library(SOIL2 soil2-debug)
 include_directories(${GLEW_INCLUDE_DIRS})
 include_directories(${GLM_INCLUDE_DIRS})
 
-SET(SOURCE_FILES main.cpp ./utils/Mesh.cpp ./models/Model.cpp ./shaders/Shader.cpp Window.cpp ./gameObject/Camera.cpp ./gameObject/DirectionalLight.cpp ./gameObject/SpotLight.cpp ./gameObject/PointLight.cpp ./gameObject/Light.cpp ./utils/utils.cpp ./textures/Texture.cpp ./textures/Material.cpp)
+SET(SOURCE_FILES main.cpp
+	./Tools/Window.cpp ./Tools/Camera.cpp ./Tools/utils.cpp
+	./Lights/Light.cpp ./Lights/DirectionalLight.cpp ./Lights/SpotLight.cpp ./Lights/PointLight.cpp ./Lights/ShadowMap.cpp 
+	./Visuals/Texture.cpp ./Visuals/Material.cpp ./Visuals/Mesh.cpp ./Visuals/Model.cpp ./Visuals/Shader.cpp 
+	)
 ADD_EXECUTABLE(project ${SOURCE_FILES})
 TARGET_LINK_LIBRARIES(project glfw)
 TARGET_LINK_LIBRARIES(project OpenGL::GL GLEW::GLEW glm assimp)
