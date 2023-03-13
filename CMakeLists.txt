@@ -19,7 +19,7 @@ include_directories(${GLM_INCLUDE_DIRS})
 
 SET(SOURCE_FILES main.cpp
 	./Tools/Window.cpp ./Tools/Camera.cpp ./Tools/utils.cpp
-	./Lights/Light.cpp ./Lights/DirectionalLight.cpp ./Lights/SpotLight.cpp ./Lights/PointLight.cpp ./Lights/ShadowMap.cpp 
+	./Lights/Light.cpp ./Lights/DirectionalLight.cpp ./Lights/SpotLight.cpp ./Lights/PointLight.cpp ./Lights/ShadowMap.cpp ./Lights/OmniShadowMap.cpp 
 	./Visuals/Texture.cpp ./Visuals/Material.cpp ./Visuals/Mesh.cpp ./Visuals/Model.cpp ./Visuals/Shader.cpp 
 	)
 ADD_EXECUTABLE(project ${SOURCE_FILES})
