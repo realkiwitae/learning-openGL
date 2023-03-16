@@ -4,7 +4,7 @@ Skybox::Skybox()
 {
 
 }
-Skybox::Skybox(std::vector<std::string> faceLocations){
+Skybox::Skybox(std::string skyboxLocation){
     
     //shader setup
     skyShader = new Shader();
@@ -19,11 +19,21 @@ Skybox::Skybox(std::vector<std::string> faceLocations){
 
     int width,height,bitDepth;
 
+	std::vector<std::string> skyboxfaces = 
+	{
+		"rt",
+		"lf",
+		"up",
+		"dn",
+		"bk",
+		"ft"
+	};
+
     for(size_t i = 0;i < 6;i++){
-        unsigned char *texData = stbi_load(faceLocations[i].c_str(), &width, &height, &bitDepth, 0);
+        unsigned char *texData = stbi_load(("./Textures/Skybox/"+skyboxLocation+"/"+skyboxfaces[i]+".tga").c_str(), &width, &height, &bitDepth, 0);
         if (!texData)
         {
-            printf("Failed to find: %s\n", faceLocations[i].c_str());
+            printf("Failed to find: %s\n", ("./Textures/Skybox/"+skyboxLocation+"/"+skyboxfaces[i]+".tga").c_str());
             return;
         }
 

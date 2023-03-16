@@ -354,16 +354,7 @@ int main()
 		20.0f);
 	spotLightCount++;
 
-	std::vector<std::string> skyboxfaces = 
-	{
-		"./Textures/Skybox/cupertin-lake_rt.tga",
-		"./Textures/Skybox/cupertin-lake_lf.tga",
-		"./Textures/Skybox/cupertin-lake_up.tga",
-		"./Textures/Skybox/cupertin-lake_dn.tga",
-		"./Textures/Skybox/cupertin-lake_bk.tga",
-		"./Textures/Skybox/cupertin-lake_ft.tga"
-	};
-	skybox = Skybox(skyboxfaces);
+	skybox = Skybox("cupertin-lake");
 
 	glm::mat4 projection = glm::perspective(glm::radians(60.0f), (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 100.0f);
 
