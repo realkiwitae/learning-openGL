@@ -29,7 +29,8 @@ SET(SOURCE_FILES
 
 	./Engine/Modeling/Material.cpp ./Engine/Modeling/Mesh.cpp ./Engine/Modeling/Model.cpp
 	./Engine/Modeling/Shader.cpp ./Engine/Modeling/Texture.cpp
-	
+	./Engine/Modeling/Skybox.cpp
+
 	./Game/Camera.cpp
 	)
 	
