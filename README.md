@@ -1,6 +1,6 @@
-# OPENGL Template
+# OPENGL Flappy-Bird
 A code sample to get started with opengl
-https://www.udemy.com/course/graphics-with-modern-opengl/learn/lecture/10016952#overview
+mplementing Flappy bird in OGL
 
 # GLFW
 sudo apt-get install libglfw3   
